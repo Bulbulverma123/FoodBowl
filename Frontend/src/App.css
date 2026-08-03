@@ -1,0 +1,30 @@
+/* Global Dark Premium Background */
+body {
+  background: radial-gradient(circle at top, #1f4037 0%, #121212 45%, #000 100%);
+  color: #fff !important;
+  min-height: 100vh;
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Buttons */
+button {
+  background: white;
+  border-radius: 10px;
+  margin: 7px;
+  padding: 7px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  width: 110px;
+  font-weight: 600;
+  transition: 0.3s ease-in-out;
+}
+
+button:hover {
+  background: #00b36b;    /* Premium success hover glow */
+  color: #fff;
+  transform: scale(1.05);
+}
