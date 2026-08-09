@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Navbar from "../Components/Nav";
 import Footer from "../Components/Footer";
 import Carousal from "../Components/Carousal";
-import CardsContainer from "../Components/CardsContainer";
-import Developer from "../Components/Developer";
 import FoodBlogSection from "../Components/FoodBlogSection";
 import SpecialParallaxSection from "../Components/SpecialParallaxSection";
 import ShopSection from "../Components/ShopSection";
@@ -28,11 +26,6 @@ const Home = () => {
         <Carousal />
 
         <ShopSection />
-
-        {/* Cards section (menu / items) */}
-        <section className="py-4">
-          <CardsContainer search={search} />
-        </section>
 
         <FoodBlogSection />
 
