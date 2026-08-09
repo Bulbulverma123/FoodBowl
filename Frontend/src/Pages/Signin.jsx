@@ -71,6 +71,8 @@ const Signin = () => {
         setError("Popup was blocked by browser. Please allow popups and try again.");
       } else if (error.code === 'auth/network-request-failed') {
         setError("Network error. Please check your internet connection.");
+      } else if (error.code === 'auth/unauthorized-domain') {
+        setError("This domain is not authorized for Google sign-in. Please use email/password to sign in.");
       } else {
         setError(error.response?.data?.message || "Google sign-in failed! Please try again.");
       }
@@ -125,6 +127,7 @@ const Signin = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
+              autoComplete="current-password"
               required
             />
           </div>

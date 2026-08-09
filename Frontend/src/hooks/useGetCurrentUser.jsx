@@ -12,7 +12,10 @@ const useGetCurrentUser = () => {
         const result = await axios.get(`${serverUrl}/api/user/current`, { withCredentials: true });
         dispatch(setUserData(result.data));
       } catch (error) {
-        console.log(error);
+        // 401 is expected when user is not logged in — don't spam the console
+        if (error.response?.status !== 401) {
+          console.log(error);
+        }
       }
     }
     fetchUser();
