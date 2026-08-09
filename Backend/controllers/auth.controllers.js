@@ -3,12 +3,16 @@ import bcrypt from "bcryptjs"
 import genToken from "../utils/token.js"
 import { sendOtpMail } from "../utils/mail.js"
 
-const cookieOptions = {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true
-}
+const getCookieOptions = (req) => {
+    const origin = req?.headers?.origin || req?.headers?.referer || "";
+    const isDeployed = origin.includes("vercel.app") || origin.includes("onrender.com") || process.env.NODE_ENV === 'production' || Boolean(process.env.RENDER);
+    return {
+        secure: isDeployed,
+        sameSite: isDeployed ? 'none' : 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    };
+};
 
 export const signUp = async (req, res) => {
     try {
@@ -37,7 +41,7 @@ export const signUp = async (req, res) => {
         })
 
         const token = await genToken(user._id)
-        res.cookie("token", token, cookieOptions)
+        res.cookie("token", token, getCookieOptions(req))
   
         return res.status(201).json(user)
 
@@ -65,7 +69,7 @@ export const signIn = async (req, res) => {
         }
 
         const token = await genToken(user._id)
-        res.cookie("token", token, cookieOptions)
+        res.cookie("token", token, getCookieOptions(req))
   
         return res.status(200).json(user)
 
@@ -76,11 +80,7 @@ export const signIn = async (req, res) => {
 
 export const signOut = async (req, res) => {
     try {
-        res.clearCookie("token", {
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            httpOnly: true
-        })
+        res.clearCookie("token", getCookieOptions(req))
         return res.status(200).json({ message: "log out successfully" })
     } catch (error) {
         return res.status(500).json({ message: `sign out error: ${error.message || error}` })
@@ -166,7 +166,7 @@ export const googleAuth = async (req, res) => {
         }
 
         const token = await genToken(user._id);
-        res.cookie("token", token, cookieOptions);
+        res.cookie("token", token, getCookieOptions(req));
   
         return res.status(200).json(user);
 

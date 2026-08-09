@@ -16,6 +16,7 @@ import orderRoutes from "./routes/order.routes.js"
 import deliveryRoutes from "./routes/delivery.routes.js"
 
 const app = express()
+app.set("trust proxy", 1)
 const server = http.createServer(app)
 
 const io = new Server(server, {
