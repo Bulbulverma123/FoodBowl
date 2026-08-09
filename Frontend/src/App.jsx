@@ -33,23 +33,25 @@ const AppRoutes = () => {
   const { userData } = useSelector((state) => state.user);
 
   const getRedirectPath = () => {
-    if (!userData) return "/login";
+    if (!userData) return "/";
     switch (userData.role) {
-      case "user":
-        return "/";
       case "owner":
         return "/owner-dashboard";
       case "deliveryBoy":
         return "/delivery-dashboard";
       default:
-        return "/login";
+        return "/";
     }
   };
 
   return (
     <Routes>
-      {/* Agar login ho gaya toh role ke hisaab se redirect karega */}
-      <Route path="/" element={userData?.role === "user" ? <Home /> : <Navigate to={getRedirectPath()} />} />
+      {/* Starting landing page visible to everyone */}
+      <Route path="/" element={
+        userData?.role === "owner" ? <Navigate to="/owner-dashboard" /> :
+        userData?.role === "deliveryBoy" ? <Navigate to="/delivery-dashboard" /> :
+        <Home />
+      } />
       <Route path="/login" element={!userData ? <Login /> : <Navigate to={getRedirectPath()} />} />
       <Route path="/signup" element={!userData ? <Signup /> : <Navigate to={getRedirectPath()} />} />
       <Route path="/signin" element={!userData ? <Signin /> : <Navigate to={getRedirectPath()} />} />
