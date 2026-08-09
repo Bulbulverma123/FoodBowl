@@ -23,8 +23,12 @@ const Orders = () => {
       });
       setOrders(response.data);
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      setError("Failed to fetch orders");
+      if (error.response?.status === 401) {
+        setError("Please log in to view your orders");
+      } else {
+        console.error("Error fetching orders:", error);
+        setError("Failed to fetch orders");
+      }
     } finally {
       setLoading(false);
     }

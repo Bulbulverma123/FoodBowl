@@ -18,12 +18,12 @@ import OwnerDashboard from "./Components/OwnerDashboard";
 import DeliveryBoy from "./Components/DeliveryBoy";
 import DeliveryBoyDashboard from "./Components/DeliveryBoyDashboard";
 
-console.log("MODE =", import.meta.env.MODE);
-console.log("serverUrl =", import.meta.env.VITE_SERVER_URL);
-
-// It's better to keep the server URL in an environment variable
-// src/App.jsx
-export const serverUrl = import.meta.env.VITE_SERVER_URL || (import.meta.env.MODE === "development" ? "http://localhost:8000" : "https://foodbowl-x5es.onrender.com");
+// Smart server URL resolution: automatically uses Render backend in production/Vercel
+export const serverUrl = (import.meta.env.VITE_SERVER_URL && !import.meta.env.VITE_SERVER_URL.includes("localhost"))
+  ? import.meta.env.VITE_SERVER_URL
+  : (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1"
+      ? "https://foodbowl-x5es.onrender.com"
+      : "http://localhost:8000");
 
 
 const AppRoutes = () => {

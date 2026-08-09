@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; 
 import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../App";
 
 const Forgotpassword = () => {
   const [step, setStep] = useState(1);
@@ -10,7 +11,6 @@ const Forgotpassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const serverUrl = import.meta.env.VITE_SERVER_URL ;
   const navigate = useNavigate();
 
   // Step 1: Send OTP

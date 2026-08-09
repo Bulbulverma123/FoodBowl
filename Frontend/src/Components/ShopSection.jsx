@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../redux/cartSlice';
 import Card from './Card'; // Import the Card component
+import { serverUrl } from '../App';
 
 const ShopSection = () => {
   const city = useSelector((state) => state.user.city);
@@ -13,7 +14,6 @@ const ShopSection = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const serverUrl = import.meta.env.VITE_SERVER_URL ;
 
   useEffect(() => {
     if (city) {
@@ -101,7 +101,7 @@ const ShopSection = () => {
                   <div className="col-md-4 mb-3" key={shop._id}>
                     <div className="card h-100 shadow-sm" onClick={() => selectShop(shop)} style={{ cursor: 'pointer' }} >
                       <img
-                        src={shop.image || 'https://via.placeholder.com/400x200.png?text=No+Image'}
+                        src={shop.image || 'https://placehold.co/400x200?text=Food+Bowl'}
                         className="card-img-top"
                         alt={shop.name}
                         style={{

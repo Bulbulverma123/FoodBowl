@@ -1,11 +1,9 @@
-// src/components/CheckoutButton.jsx
 import React from "react";
 import axios from "axios";
+import { serverUrl } from "../App";
 
 const CheckoutButton = ({ cartItems, deliveryAddress, totalAmount /* rupees, e.g. 129.5 */, customer }) => {
-  // Using Vite env directly
-  const serverUrl = import.meta.env.VITE_SERVER_URL || "";
-  const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || "<rzp_test_xxx>";
+  const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_RqNuaj3NFUS6XO";
 
   const handlePay = async () => {
     try {

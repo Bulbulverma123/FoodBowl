@@ -34,7 +34,7 @@ const OwnerDashboard = () => {
 
   // ---- Helper to build proper image URL ----
   const getItemImageUrl = (imagePath) => {
-    if (!imagePath) return "https://via.placeholder.com/50";
+    if (!imagePath) return "https://placehold.co/50";
 
     // agar already full URL hai (http/https)
     if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
