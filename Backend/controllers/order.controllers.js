@@ -6,12 +6,23 @@ import Order from "../models/order.model.js";
 import User from "../models/user.model.js";
 import Shop from "../models/shop.model.js";
 
-dotenv.config();
+dotenv.config({ quiet: true });
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET
-});
+let razorpayInstance = null;
+const getRazorpayInstance = () => {
+  if (!razorpayInstance && process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    try {
+      razorpayInstance = new Razorpay({
+        key_id: process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET
+      });
+    } catch (err) {
+      console.error("Failed to initialize Razorpay:", err);
+      razorpayInstance = null;
+    }
+  }
+  return razorpayInstance;
+};
 
 // Helper: convert rupees to paise (if frontend sends amount in rupees)
 const toPaise = (amount) => {
@@ -84,13 +95,17 @@ export const placeOrder = async (req, res) => {
     let razorpayOrder = null;
     if (paymentMethod === "razorpay") {
       try {
+        const rInstance = getRazorpayInstance();
+        if (!rInstance) {
+          throw new Error("Razorpay is not configured on the server");
+        }
         const options = {
           amount: totalAmountInPaise,
           currency: "INR",
           receipt: `rcpt_${newOrder._id}`,
           payment_capture: 1
         };
-        razorpayOrder = await razorpay.orders.create(options);
+        razorpayOrder = await rInstance.orders.create(options);
 
         newOrder.razorpay_order_id = razorpayOrder.id;
         newOrder.razorpay_order = razorpayOrder;
@@ -208,6 +223,7 @@ export const getOwnerOrders = async (req, res) => {
       for (const shopOrder of order.shopOrders) {
         await Order.populate(shopOrder, {
           path: "shopOrderItems.item",
+          model: "Item",
           select: "name image price"
         });
       }
@@ -297,6 +313,11 @@ export const createRazorpayOrder = async (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid order amount" });
     }
 
+    const rInstance = getRazorpayInstance();
+    if (!rInstance) {
+      return res.status(500).json({ success: false, message: "Razorpay is not configured on the server" });
+    }
+
     const options = {
       amount: amount,
       currency: "INR",
@@ -304,7 +325,7 @@ export const createRazorpayOrder = async (req, res) => {
       payment_capture: 1
     };
 
-    const rOrder = await razorpay.orders.create(options);
+    const rOrder = await rInstance.orders.create(options);
 
     appOrder.razorpay_order_id = rOrder.id;
     appOrder.razorpay_order = rOrder;

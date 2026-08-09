@@ -23,7 +23,7 @@ console.log("serverUrl =", import.meta.env.VITE_SERVER_URL);
 
 // It's better to keep the server URL in an environment variable
 // src/App.jsx
-export const serverUrl = import.meta.env.VITE_SERVER_URL || (import.meta.env.MODE === "development" ? "http://localhost:5001" : "https://your-render-backend-url.onrender.com");
+export const serverUrl = import.meta.env.VITE_SERVER_URL || (import.meta.env.MODE === "development" ? "http://localhost:8000" : "https://foodbowl-3.onrender.com");
 
 
 const AppRoutes = () => {

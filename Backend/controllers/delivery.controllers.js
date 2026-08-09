@@ -66,13 +66,12 @@ export const getAvailableOrders = async (req, res) => {
             { $sort: { createdAt: -1 } }
         ]);
 
-        // The aggregation pipeline for items is complex, so we'll populate them here for simplicity
-        for (const order of availableOrders) {
-            await Order.populate(order, {
-                path: "items.item",
-                select: "name image price"
-            });
-        }
+        // Populate item details on plain aggregation objects
+        await Order.populate(availableOrders, {
+            path: "items.item",
+            model: "Item",
+            select: "name image price"
+        });
 
         return res.status(200).json(availableOrders);
     } catch (error) {
@@ -221,13 +220,13 @@ export const getMyOrders = async (req, res) => {
                         orderId: order._id,
                         shopOrderId: shopOrder._id,
                         customer: {
-                            name: order.user.fullName,
-                            email: order.user.email,
-                            mobile: order.user.mobile
+                            name: order.user?.fullName || "",
+                            email: order.user?.email || "",
+                            mobile: order.user?.mobile || ""
                         },
                         shop: {
-                            name: shopOrder.shop.name,
-                            address: shopOrder.shop.address
+                            name: shopOrder.shop?.name || "",
+                            address: shopOrder.shop?.address || ""
                         },
                         items: shopOrder.shopOrderItems,
                         subtotal: shopOrder.subtotal,

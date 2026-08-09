@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.post("/", isAuth, upload.single('image'), createEditShop);
 router.get("/my-shop", isAuth, getMyShop);
+router.get("/get-my", isAuth, getMyShop);
 router.get("/city/:city", getShopByCity);
+router.get("/get-by-city/:city", getShopByCity);
 
 export default router;

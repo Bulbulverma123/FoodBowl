@@ -20,6 +20,7 @@ router.post("/", isAuth, placeOrder);
 
 // Get user orders
 router.get("/user", isAuth, getUserOrders);
+router.get("/my-orders", isAuth, getUserOrders);
 
 // Get owner orders
 router.get("/owner", isAuth, getOwnerOrders);
